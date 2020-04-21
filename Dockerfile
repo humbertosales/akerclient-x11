@@ -61,6 +61,9 @@ COPY src/local.conf /etc/fonts/local.conf
 COPY src/port_foward.sh /port_foward.sh 
 COPY src/start.sh /start.sh 
 
+RUN chmod 755 /port_foward.sh
+RUN chmod 755 /start.sh
+
 #RDP PORT
 EXPOSE 3389
 
