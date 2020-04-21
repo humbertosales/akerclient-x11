@@ -61,7 +61,8 @@ COPY src/local.conf /etc/fonts/local.conf
 COPY src/port_foward.sh /port_foward.sh 
 COPY src/start.sh /start.sh 
 
-EXPOSE 3389 #RDP
+#RDP PORT
+EXPOSE 3389
 
 ENTRYPOINT ["/start.sh"]
 
