@@ -69,5 +69,6 @@ EXPOSE 3389
 
 ENTRYPOINT ["/start.sh"]
 
-CMD "/usr/local/AkerClient/akerclient_init.sh"
+#CMD ["/usr/local/AkerClient/akerclient_init.sh"]
+CMD ["bash"]
 
