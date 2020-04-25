@@ -8,7 +8,7 @@ services:
           - "3380:3389"
         environment:
           - DISPLAY=host.docker.internal:0.0
-          - VPNRDPIP=IP_DESKTOP_REMOTE_ACCESS
+          - VPNRDPIP=<IP_DESKTOP_REMOTE_ACCESS>
         volumes:
           - /lib/modules:/lib/modules:ro
           - /tmp/.X11-unix:/tmp/.X11-unix

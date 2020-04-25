@@ -26,3 +26,10 @@ docker run -it --rm -v /tmp/.X11-unix:/tmp/.X11-unix -v /lib/modules:/lib/module
 6. Connect Microsoft Terminal Service (Remote Access) in *localhost:3380*
 
 ![Terminal Service](terminal-service.png)
+
+
+# Tested 
+
+ Docker Desktop (windows) version 2.2.0.5 (build 43884) - stable (Linuxkit Kernel 4.19.76)
+ 
+ 

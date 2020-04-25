@@ -5,7 +5,8 @@ IPTBL=/sbin/iptables
 IF_IN=eth0
 PORT_IN=3389
 
-IP_OUT=172.16.111.33
+#VPNRDPIP = var enviroment
+IP_OUT=$VPNRDPIP
 PORT_OUT=3389
 
 echo "1" > /proc/sys/net/ipv4/ip_forward
