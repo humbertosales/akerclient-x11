@@ -27,8 +27,7 @@ RUN apt update \
   libpango1.0-0 \
   libpulse0 \
   libv4l-0 \
-  fonts-symbola \
-  firefox-esr
+  fonts-symbola 
   
 RUN apt install -qqy \
   bzip2 \
