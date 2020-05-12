@@ -1,7 +1,7 @@
 #https://github.com/docker/for-win/issues/6099
 
 ARG KERNEL_VERSION=4.19.76
-FROM docker/for-desktop-kernel:4.19.76-d665d2cbc4fe70f8ab08ba2cd82d052e41d2a704-amd64 AS ksrc
+FROM docker/for-desktop-kernel:4.19.76-ce15f646db9b062dc947cfc0c1deab019fa63f96-amd64 AS ksrc
 
 # Extract headers and compile module
 FROM debian:stable-slim AS build
