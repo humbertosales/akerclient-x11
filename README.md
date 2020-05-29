@@ -30,7 +30,9 @@ docker run -it --rm -v /tmp/.X11-unix:/tmp/.X11-unix -v /lib/modules:/lib/module
 
 # Tested 
 
+ * Docker Desktop (windows) version 2.3.0.3 (build 45519) - stable (Linuxkit Kernel 4.19.76) - TAG 2.3.0.3
  * Docker Desktop (windows) version 2.2.0.5 (build 43884) - stable (Linuxkit Kernel 4.19.76) - TAG 2.2.0.5
  * Docker Desktop (windows) version 2.3.0.2 (build 45183) - stable (Linuxkit Kernel 4.19.76) - TAG 2.3.0.2
+ 
  
  
