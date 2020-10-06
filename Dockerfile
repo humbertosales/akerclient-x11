@@ -1,13 +1,6 @@
-#https://github.com/docker/for-win/issues/6099
+#https://medium.com/@centerorbit/installing-wireguard-in-wsl-2-dd676520cb21
 
-ARG KERNEL_VERSION=4.19.76
-FROM docker/for-desktop-kernel:4.19.76-83885d3b4cff391813f4262099b36a529bca2df8-amd64 AS ksrc
-
-# Extract headers and compile module
-FROM debian:stable-slim AS build
-
-COPY --from=ksrc /kernel-dev.tar /
-RUN tar xf kernel-dev.tar
+FROM debian:stable-slim 
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt update \
@@ -37,22 +30,44 @@ RUN apt install -qqy \
   inetutils-ping \
   iproute2 \
   ssh \
-  iptables
+  iptables  
   
-RUN apt-get install -qqy musl-dev gcc-8-plugin-dev
-RUN ln -s /usr/lib/x86_64-linux-musl/libc.so /lib/libc.musl-x86_64.so.1
+RUN apt-get install -qqy \ 
+  musl-dev \ 
+  gcc-8-plugin-dev
+  
+RUN apt-get install -qqy \
+  libelf-dev \
+  pkg-config \
+  bison \
+  flex \
+  libssl-dev \
+  git \
+  bc
 
-WORKDIR /usr/src/linux-headers-4.19.76-linuxkit
-RUN make gcc-plugins 
+#(uname -r)
+ARG WSL2_VERSION=4.19.128-microsoft-standard
+
+RUN git clone --branch $WSL2_VERSION --depth 1 https://github.com/microsoft/WSL2-Linux-Kernel.git  /usr/src/$WSL2_VERSION
+
+WORKDIR /usr/src/$WSL2_VERSION
+
+RUN zcat /proc/config.gz > .config
 
 
-RUN apt clean \
-	&& rm -rf /var/lib/apt/lists/* 
+#RUN make -j $(nproc)  
+#RUN make -j $(nproc) modules_install  
 
+#https://unix.stackexchange.com/questions/270123/how-to-create-usr-src-linux-headers-version-files
+RUN make O=/usr/src/linux-headers-$WSL2_VERSION oldconfig
+RUN make mrproper
+RUN make O=/usr/src/linux-headers-$WSL2_VERSION modules_prepare
+
+ 
 WORKDIR /
 
 
-ADD http://download.aker.com.br/prod/current/autenticadores/linux/akerclient-2.0.11-pt-linux64-install-0005.bin /akerclient-2.0.11-pt-linux64-install-0005.bin
+ADD http://download.aker.com.br/produtos/current/autenticadores/linux/akerclient-2.0.11-pt-linux64-install-0005.bin /akerclient-2.0.11-pt-linux64-install-0005.bin
 #ADD src/akerclient-2.0.11-pt-linux64-install-0005.bin /akerclient-2.0.11-pt-linux64-install-0005.bin
 RUN chmod 755 /akerclient-2.0.11-pt-linux64-install-0005.bin
 
@@ -62,6 +77,11 @@ COPY src/start.sh /start.sh
 
 RUN chmod 755 /port_foward.sh
 RUN chmod 755 /start.sh
+
+
+#https://github.com/pivpn/pivpn/issues/751
+RUN mv /usr/sbin/iptables /usr/sbin/iptables.nf-problem
+RUN sudo ln -s /usr/sbin/iptables-legacy /usr/sbin/iptables
 
 #RDP PORT
 EXPOSE 3389

@@ -1,7 +1,7 @@
 version: '3'
 services:
     akerclient:
-        image: humbertosales/akerclient-x11
+        image: humbertosales/akerclient-x11:wsl2
         privileged: true
         shm_size: 2G
         ports:
@@ -10,7 +10,6 @@ services:
           - DISPLAY=host.docker.internal:0.0
           - VPNRDPIP=<IP_DESKTOP_REMOTE_ACCESS>
         volumes:
-          - /lib/modules:/lib/modules:ro
           - /tmp/.X11-unix:/tmp/.X11-unix
           - ./home/:/root/
         
