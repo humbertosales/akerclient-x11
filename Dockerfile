@@ -52,7 +52,8 @@ RUN git clone --branch $WSL2_VERSION --depth 1 https://github.com/microsoft/WSL2
 
 WORKDIR /usr/src/$WSL2_VERSION
 
-RUN zcat /proc/config.gz > .config
+#Not working in Docker Hub Builder
+#RUN zcat /proc/config.gz > .config
 
 
 #RUN make -j $(nproc)  
