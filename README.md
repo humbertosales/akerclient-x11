@@ -32,6 +32,7 @@ docker run -it --rm -v /tmp/.X11-unix:/tmp/.X11-unix -v /lib/modules:/lib/module
 
 # Tested 
 
+ * Docker Desktop (windows) version 2.5.0.0 (build 49427) - WSL2 - stable (4.19.128-microsoft-standard) - TAG 2.5.0.0-wsl2 (perhaps v2.5.0.0-wsl2)
  * Docker Desktop (windows) version 2.4.0.0 (build 48506) - WSL2 - stable (4.19.128-microsoft-standard) - TAG 2.4.0.0-wsl2 (perhaps v2.4.0.0-wsl2)
  * Docker Desktop (windows) version 2.2.0.5 (build 43884) - stable (Linuxkit Kernel 4.19.76) - TAG 2.2.0.5
  * Docker Desktop (windows) version 2.3.0.2 (build 45183) - stable (Linuxkit Kernel 4.19.76) - TAG 2.3.0.2
