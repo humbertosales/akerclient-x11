@@ -67,9 +67,9 @@ RUN make O=/usr/src/linux-headers-$WSL2_VERSION modules_prepare
  
 WORKDIR /
 
-
-ADD http://download.aker.com.br/produtos/current/autenticadores/linux/akerclient-2.0.11-pt-linux64-install-0005.bin /akerclient-2.0.11-pt-linux64-install-0005.bin
-#ADD src/akerclient-2.0.11-pt-linux64-install-0005.bin /akerclient-2.0.11-pt-linux64-install-0005.bin
+#Download with recaptcha now
+#ADD http://download.aker.com.br/produtos/current/autenticadores/linux/akerclient-2.0.11-pt-linux64-install-0005.bin /akerclient-2.0.11-pt-linux64-install-0005.bin
+ADD src/akerclient-2.0.11-pt-linux64-install-0005.bin /akerclient-2.0.11-pt-linux64-install-0005.bin
 RUN chmod 755 /akerclient-2.0.11-pt-linux64-install-0005.bin
 
 COPY src/local.conf /etc/fonts/local.conf
