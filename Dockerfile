@@ -1,10 +1,9 @@
 #https://github.com/docker/for-win/issues/6099
-
-ARG KERNEL_VERSION=4.19.76
-FROM docker/for-desktop-kernel:4.19.76-83885d3b4cff391813f4262099b36a529bca2df8-amd64 AS ksrc
+FROM docker/for-desktop-kernel:4.19.121-2a1dbedf3f998dac347c499808d7c7e029fbc4d3-amd64 AS ksrc
 
 # Extract headers and compile module
 FROM debian:stable-slim AS build
+ARG KERNEL_VERSION=4.19.121
 
 COPY --from=ksrc /kernel-dev.tar /
 RUN tar xf kernel-dev.tar
@@ -42,7 +41,9 @@ RUN apt install -qqy \
 RUN apt-get install -qqy musl-dev gcc-8-plugin-dev
 RUN ln -s /usr/lib/x86_64-linux-musl/libc.so /lib/libc.musl-x86_64.so.1
 
-WORKDIR /usr/src/linux-headers-4.19.76-linuxkit
+RUN echo "kernel set is ${KERNEL_VERSION}"
+
+WORKDIR /usr/src/linux-headers-${KERNEL_VERSION}-linuxkit
 RUN make gcc-plugins 
 
 

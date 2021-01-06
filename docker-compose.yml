@@ -11,4 +11,5 @@ services:
           - VPNRDPIP=<IP_DESKTOP_REMOTE_ACCESS>
         volumes:
           - ./home/:/root/
-        
+          - /lib/modules:/lib/modules
+          - /tmp/.X11-unix:/tmp/.X11-unix          
