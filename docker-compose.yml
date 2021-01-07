@@ -10,6 +10,7 @@ services:
           - DISPLAY=host.docker.internal:0.0
           - VPNRDPIP=<IP_DESKTOP_REMOTE_ACCESS>
         volumes:
-          - /tmp/.X11-unix:/tmp/.X11-unix
           - ./home/:/root/
+          - /lib/modules:/lib/modules
+          - /tmp/.X11-unix:/tmp/.X11-unix    
         
