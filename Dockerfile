@@ -62,6 +62,16 @@ WORKDIR /usr/src/$WSL2_VERSION
 #https://github.com/microsoft/WSL2-Linux-Kernel/blob/master/README-Microsoft.WSL2
 RUN make KCONFIG_CONFIG=Microsoft/config-wsl
 
+#https://github.com/microsoft/WSL2-Linux-Kernel/issues/78
+#Generate folders like "linux-headers-..
+RUN cp ./Microsoft/config-wsl ./.config
+RUN make O=/usr/src/linux-headers-$WSL2_VERSION oldconfig 
+RUN make mrproper
+RUN make O=/usr/src/linux-headers-$WSL2_VERSION prepare
+RUN make O=/usr/src/linux-headers-$WSL2_VERSION scripts
+RUN make O=/usr/src/linux-headers-$WSL2_VERSION modules
+
+
 #Not working in Docker Hub Builder
 #RUN zcat /proc/config.gz > .config
 
