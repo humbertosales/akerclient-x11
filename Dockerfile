@@ -44,13 +44,23 @@ RUN apt-get install -qqy \
   libssl-dev \
   git \
   bc
+ 
 
 #(uname -r)
 ARG WSL2_VERSION=4.19.128-microsoft-standard
 
-RUN git clone --branch $WSL2_VERSION --depth 1 https://github.com/microsoft/WSL2-Linux-Kernel.git  /usr/src/$WSL2_VERSION
+ADD https://github.com/microsoft/WSL2-Linux-Kernel/archive/$WSL2_VERSION.zip /usr/src/
+
+RUN apt install unzip
+
+RUN unzip /usr/src/$WSL2_VERSION.zip -d /usr/src/
+
+RUN mv /usr/src/WSL2-Linux-Kernel-$WSL2_VERSION /usr/src/$WSL2_VERSION
 
 WORKDIR /usr/src/$WSL2_VERSION
+
+#https://github.com/microsoft/WSL2-Linux-Kernel/blob/master/README-Microsoft.WSL2
+RUN make KCONFIG_CONFIG=Microsoft/config-wsl
 
 #Not working in Docker Hub Builder
 #RUN zcat /proc/config.gz > .config
@@ -60,9 +70,9 @@ WORKDIR /usr/src/$WSL2_VERSION
 #RUN make -j $(nproc) modules_install  
 
 #https://unix.stackexchange.com/questions/270123/how-to-create-usr-src-linux-headers-version-files
-RUN make O=/usr/src/linux-headers-$WSL2_VERSION oldconfig
-RUN make mrproper
-RUN make O=/usr/src/linux-headers-$WSL2_VERSION modules_prepare
+#RUN make O=/usr/src/linux-headers-$WSL2_VERSION oldconfig
+#RUN make mrproper
+#RUN make O=/usr/src/linux-headers-$WSL2_VERSION modules_prepare
 
  
 WORKDIR /
