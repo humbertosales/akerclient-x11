@@ -8,8 +8,13 @@ echo 'Ativando port forward 3380 do container -> 3389 da VPN'
 /port_foward.sh
 
 
-echo 'Instalando o aker...'
-/akerclient-2.0.11-pt-linux64-install-0005.bin
+#echo 'Instalando o aker...'
+#/akerclient-2.0.11-pt-linux64-install-0005.bin
+
+echo "Iniciando serviço aker..."
+/etc/init.d/acservice start
+
+echo "Para iniciar a interface gráfica, execute /usr/local/AkerClient/akerclient_init.sh (seta pra cima, está no history!)"
 
 echo "/usr/local/AkerClient/akerclient_init.sh" > /root/.bash_history
 

@@ -1,6 +1,6 @@
 #https://medium.com/@centerorbit/installing-wireguard-in-wsl-2-dd676520cb21
 
-FROM debian:stable-slim 
+FROM debian:stable-slim as build
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt update \
@@ -39,6 +39,7 @@ RUN apt update \
   git \
   bc \
   unzip \
+  wget \
   && rm -rf /var/lib/apt/lists/*  
   
   
@@ -47,16 +48,15 @@ RUN apt update \
 #(uname -r)
 ARG WSL2_VERSION=4.19.128-microsoft-standard
 
-ADD https://github.com/microsoft/WSL2-Linux-Kernel/archive/$WSL2_VERSION.zip /usr/src/
-
-RUN unzip /usr/src/$WSL2_VERSION.zip -d /usr/src/
-
-RUN mv /usr/src/WSL2-Linux-Kernel-$WSL2_VERSION /usr/src/$WSL2_VERSION
+RUN wget -P /usr/src/ https://github.com/microsoft/WSL2-Linux-Kernel/archive/$WSL2_VERSION.zip && \
+ unzip /usr/src/$WSL2_VERSION.zip -d /usr/src/ && \
+ rm -rf /usr/src/$WSL2_VERSION.zip && \
+ mv /usr/src/WSL2-Linux-Kernel-$WSL2_VERSION /usr/src/$WSL2_VERSION
 
 WORKDIR /usr/src/$WSL2_VERSION
 
 #https://github.com/microsoft/WSL2-Linux-Kernel/blob/master/README-Microsoft.WSL2
-RUN make KCONFIG_CONFIG=Microsoft/config-wsl
+#RUN make KCONFIG_CONFIG=Microsoft/config-wsl
 
 #https://github.com/microsoft/WSL2-Linux-Kernel/issues/78 + #https://unix.stackexchange.com/questions/270123/how-to-create-usr-src-linux-headers-version-files
 #Generate folders like "linux-headers-..
@@ -74,6 +74,39 @@ WORKDIR /
 #ADD http://download.aker.com.br/produtos/current/autenticadores/linux/akerclient-2.0.11-pt-linux64-install-0005.bin /akerclient-2.0.11-pt-linux64-install-0005.bin
 COPY src/akerclient-2.0.11-pt-linux64-install-0005.bin /akerclient-2.0.11-pt-linux64-install-0005.bin
 RUN chmod 755 /akerclient-2.0.11-pt-linux64-install-0005.bin
+RUN  /akerclient-2.0.11-pt-linux64-install-0005.bin > /tmp/logakerclient_install.log
+
+FROM debian:stable-slim as run
+
+RUN apt update \
+  && apt install -qqy \
+  x11-utils \
+  x11-apps \
+  openssl \
+  libcurl4 \
+  libnss3-tools \
+  apt-transport-https \
+  ca-certificates \
+  sudo \
+  gnupg \
+  hicolor-icon-theme \
+  libgl1-mesa-dri \
+  libgl1-mesa-glx \
+  libpango1.0-0 \
+  libpulse0 \
+  libv4l-0 \
+  fonts-symbola \
+  net-tools \
+  inetutils-ping \
+  iproute2 \
+  ssh \
+  iptables \
+  kmod \
+  && rm -rf /var/lib/apt/lists/*  
+
+COPY --from=build /usr/local/AkerClient/ /usr/local/AkerClient/
+COPY --from=build /tmp/logakerclient_install.log /tmp/logakerclient_install.log
+COPY --from=build /etc/init.d/acservice /etc/init.d/acservice
 
 COPY src/local.conf /etc/fonts/local.conf
 COPY src/port_foward.sh /port_foward.sh 
@@ -81,6 +114,7 @@ COPY src/start.sh /start.sh
 
 RUN chmod 755 /port_foward.sh
 RUN chmod 755 /start.sh
+
 
 
 #https://github.com/pivpn/pivpn/issues/751
